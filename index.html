@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Input Nama Sertifikat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <!-- Container -->
+    <div class="w-full max-w-md bg-white shadow-lg rounded-xl p-6">
+      <!-- Header with Logo -->
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:gap-4 gap-2 mb-6"
+      >
+        <img
+          src="./assets/logo.png"
+          alt="Logo"
+          class="w-16 h-16 object-contain mx-auto sm:mx-0"
+        />
+        <h2
+          class="text-center sm:text-left text-xl font-bold text-gray-800 leading-tight"
+        >
+          Open House<br />
+          SMK Pangudi Luhur Tarcisius
+        </h2>
+      </div>
+
+      <!-- Title -->
+      <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">
+        Form Input Nama Sertifikat
+      </h1>
+
+      <!-- Form -->
+      <form id="formNama" class="space-y-4">
+        <div>
+          <label class="block mb-1 text-gray-700 font-medium"
+            >Nama Lengkap</label
+          >
+          <input
+            type="text"
+            id="nama"
+            placeholder="Masukkan nama lengkap"
+            required
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-2 rounded-lg font-semibold"
+        >
+          Generate Sertifikat
+        </button>
+      </form>
+
+      <!-- Output -->
+      <div id="hasil" class="mt-6 hidden">
+        <p class="text-center text-green-700 font-medium">
+          Sertifikat berhasil dibuat!
+        </p>
+        <a
+          id="downloadLink"
+          class="block mt-3 text-center text-blue-600 underline"
+          target="_blank"
+        >
+          Download Sertifikat
+        </a>
+      </div>
+    </div>
+
+    <script>
+      // ==== SCRIPT FORM ====
+      document
+        .getElementById("formNama")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const nama = document.getElementById("nama").value.trim();
+          if (!nama) return;
+
+          // URL backend Render kamu (contoh)
+          const API_URL = "https://backend-sertifikat.onrender.com/generate";
+
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nama }),
+          });
+
+          const data = await res.json();
+
+          if (data?.url) {
+            document.getElementById("hasil").classList.remove("hidden");
+            document.getElementById("downloadLink").href = data.url;
+          }
+        });
+    </script>
+  </body>
+</html>
